@@ -1,4 +1,4 @@
-# BSc Thesis, Algorithmic Collusion: A Computational Study of Firms CSR Investment Decisions
+# BSc Thesis, Algorithmic Collusion: A Computational Study of Firms' CSR Investment Decisions
 
 In progress
 
