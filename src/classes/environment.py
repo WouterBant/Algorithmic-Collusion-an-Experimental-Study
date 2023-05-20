@@ -29,8 +29,8 @@ class Environment:
         Returns:
             tuple: A tuple containing the prices for the goods of firm 1 and 2.
         """
-        p1 = self.Xi - self.Mu * (q1 + q2) + self.Lambda * (Theta2 - Theta1)
-        p2 = self.Xi - self.Mu * (q1 + q2) + self.Lambda * (Theta1 - Theta2)
+        p1 = max(self.Xi - self.Mu * (q1 + q2) + self.Lambda * (Theta2 - Theta1), 0)
+        p2 = max(self.Xi - self.Mu * (q1 + q2) + self.Lambda * (Theta1 - Theta2), 0)
         return (p1, p2)
 
     def C(self, Theta1, Theta2):
