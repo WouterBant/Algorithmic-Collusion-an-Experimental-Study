@@ -1,5 +1,6 @@
 from classes.action import Action
-from classes.agent import Agent
+from classes import Qlearning
+# from classes import DQN
 import numpy as np
 
 
@@ -52,8 +53,8 @@ def simulate_episode(env, Qs, k=6, gamma=0.9, T=500_000, L=1_000):
     Action1, Action2, Action1_next, Action2_next = np.random.choice(actions, size=4)
     
     # Create both agents
-    Agent1 = Agent(actions, gamma)
-    Agent2 = Agent(actions, gamma)
+    Agent1 = Qlearning.Agent(actions, gamma)
+    Agent2 = Qlearning.Agent(actions, gamma)
 
     # Keep track of metrics
     pi1_ep, pi2_ep = [], []
