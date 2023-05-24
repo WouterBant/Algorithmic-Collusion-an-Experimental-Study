@@ -69,7 +69,8 @@ def simulate_episode(env, Qs, k=6, gamma=0.9, T=500_000, L=1_000):
 
             # Calculate the current profits
             pi1, pi2 = env.Pi(current_action1, current_action2)
-
+            
+            # With regulator subtract penalties here
 
             # Calculate the next profit
             pi1_next, _ = env.Pi(current_action1, Action2_next)
