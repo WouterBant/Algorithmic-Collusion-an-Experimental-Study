@@ -2,6 +2,8 @@ from classes.action import Action
 from classes import Qlearning
 # from classes import DQN
 import numpy as np
+import os
+import h5py
 
 
 def create_actions(Qs, k):
@@ -110,5 +112,57 @@ def simulate_episode(env, Qs, k=6, gamma=0.9, T=500_000, L=1_000):
     pi1_L, pi2_L = pi1_ep[-L:], pi2_ep[-L:]
     theta1_L, theta2_L = theta1[-L:], theta2[-L:]
     q1_L, q2_L = q1[-L:], q2[-L:]
+
+    pi1_t, pi2_t, theta1_t, theta2_t, q1_t, q2_t = [], [], [], [], [], []
+    for i in range(0, T, 49999):
+        pi1_t += pi1_ep[i:i+5]
+        pi2_t += pi2_ep[i:i+5]
+        theta1_t += theta1[i:i+5]
+        theta2_t += theta2[i:i+5]
+        q1_t += q1[i:i+5]
+        q2_t += q2[i:i+5]
     
-    return (pi1_L, pi2_L, theta1_L, theta2_L, q1_L, q2_L)
+    return (pi1_L, pi2_L, theta1_L, theta2_L, q1_L, q2_L,
+            pi1_t, pi2_t, theta1_t, theta2_t, q1_t, q2_t)
+
+
+def simulate_episodes(groupname, env, Qs, k=6, gamma=0.9, T=500_000, L=1_000, n_episodes=1_000):
+    current_dir = os.getcwd()
+    file_path = os.path.join(current_dir, '..', 'data', 'simulation_data.h5')
+    
+    with h5py.File(file_path, 'a') as file:
+        if groupname in file:
+            msg = "This group already exists!!!"
+            raise ValueError(msg)
+        else:
+            group = file.create_group(groupname)
+
+        # Create datasets within the group to store the variables
+        pi1_L_dataset = group.create_dataset('pi1_L', (n_episodes, L), dtype='float')
+        pi2_L_dataset = group.create_dataset('pi2_L', (n_episodes, L), dtype='float')
+        theta1_L_dataset = group.create_dataset('theta1_L', (n_episodes, L), dtype='float')
+        theta2_L_dataset = group.create_dataset('theta2_L', (n_episodes, L), dtype='float')
+        q1_L_dataset = group.create_dataset('q1_L', (n_episodes, L), dtype='float')
+        q2_L_dataset = group.create_dataset('q2_L', (n_episodes, L), dtype='float')
+        pi1_t_dataset = group.create_dataset('pi1_t', (n_episodes, 55), dtype='float')
+        pi2_t_dataset = group.create_dataset('pi2_t', (n_episodes, 55), dtype='float')
+        theta1_t_dataset = group.create_dataset('theta1_t', (n_episodes, 55), dtype='float')
+        theta2_t_dataset = group.create_dataset('theta2_t', (n_episodes, 55), dtype='float')
+        q1_t_dataset = group.create_dataset('q1_t', (n_episodes, 55), dtype='float')
+        q2_t_dataset = group.create_dataset('q2_t', (n_episodes, 55), dtype='float')
+
+        for i in range(n_episodes):
+            print(i)
+            pi1_L, pi2_L, theta1_L, theta2_L, q1_L, q2_L, pi1_t, pi2_t, theta1_t, theta2_t, q1_t, q2_t = simulate_episode(env, Qs, k)
+            pi1_L_dataset[i] = pi1_L
+            pi2_L_dataset[i] = pi2_L
+            theta1_L_dataset[i] = theta1_L
+            theta2_L_dataset[i] = theta2_L
+            q1_L_dataset[i] = q1_L
+            q2_L_dataset[i] = q2_L
+            pi1_t_dataset[i] = pi1_t
+            pi2_t_dataset[i] = pi2_t
+            theta1_t_dataset[i] = theta1_t
+            theta2_t_dataset[i] = theta2_t
+            q1_t_dataset[i] = q1_t
+            q2_t_dataset[i] = q2_t
