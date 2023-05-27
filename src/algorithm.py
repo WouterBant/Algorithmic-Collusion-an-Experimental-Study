@@ -153,7 +153,7 @@ def simulate_episodes(groupname, env, Qs, k=6, gamma=0.9, T=500_000, L=1_000, n_
 
         for i in range(n_episodes):
             print(i)
-            pi1_L, pi2_L, theta1_L, theta2_L, q1_L, q2_L, pi1_t, pi2_t, theta1_t, theta2_t, q1_t, q2_t = simulate_episode(env, Qs, k)
+            pi1_L, pi2_L, theta1_L, theta2_L, q1_L, q2_L, pi1_t, pi2_t, theta1_t, theta2_t, q1_t, q2_t = simulate_episode(env, Qs, k, gamma, T, L)
             pi1_L_dataset[i] = pi1_L
             pi2_L_dataset[i] = pi2_L
             theta1_L_dataset[i] = theta1_L
