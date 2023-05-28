@@ -47,7 +47,6 @@ def simulate_episode(env, Qs, k=6, gamma=0.9, T=500_000, L=1_000):
             - q1_L (list): List of production quantities for player 1.
             - q2_L (list): List of production quantities for player 2.
     """
-
     # Create the set of available actions
     actions = create_actions(Qs, k)
 
