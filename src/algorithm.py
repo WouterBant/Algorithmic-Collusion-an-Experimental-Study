@@ -1,6 +1,5 @@
 from classes.action import Action
 from classes import Qlearning
-# from classes import DQN
 import numpy as np
 import os
 import h5py

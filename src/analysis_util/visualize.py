@@ -27,6 +27,14 @@ def visualize_cycle(cycle):
         pi1_cycle.append(pi1); pi2_cycle.append(pi2)
         theta1_cycle.append(theta1); theta2_cycle.append(theta2)
         q1_cycle.append(q1); q2_cycle.append(q2)
+    a = 4 if len(pi1_cycle) == 1 else 2
+    pi1_cycle *= a
+    pi2_cycle *= a
+    theta1_cycle *= a
+    theta2_cycle *= a
+    q1_cycle *= a
+    q2_cycle *= a
+
 
     plt.figure(figsize=(10, 6))
 
