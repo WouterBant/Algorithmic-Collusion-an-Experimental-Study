@@ -41,14 +41,19 @@ class Cycle_Classifier:
         Returns:
             list: List of tuples representing the identified cycle.
         """
-        cycle = []
-        for t in range(len(cur_pi1)-1, -1, -1):
-            cur_play = (cur_pi1[t], cur_pi2[t], cur_theta1[t], cur_theta2[t], cur_q1[t], cur_q2[t])
-            # When the current state was also the first state, a cycle has been found
-            if len(cycle) > 0 and cur_play == cycle[0]:
-                break
-            # Otherwise add the current state to the cycle being created
-            cycle.append(cur_play)
+        start = len(cur_pi1)-1
+        cycle_found = False
+        while not cycle_found:
+            cycle = []
+            for t in range(start, -1, -1):
+                cur_play = (cur_pi1[t], cur_pi2[t], cur_theta1[t], cur_theta2[t], cur_q1[t], cur_q2[t])
+                # When the current state was also the first state, a cycle has been found
+                if len(cycle) > 0 and cur_play == cycle[0]:
+                    cycle_found = True
+                    break
+                # Otherwise add the current state to the cycle being created
+                cycle.append(cur_play)
+            start -= 15
         return cycle[::-1]
     
     def alternative_cycle(self, pattern):

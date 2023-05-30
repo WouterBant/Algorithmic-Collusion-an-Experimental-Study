@@ -126,7 +126,7 @@ def simulate_episode(env, Qs, k=6, gamma=0.9, T=500_000, L=1_000):
 
 def simulate_episodes(groupname, env, Qs, k=6, gamma=0.9, T=500_000, L=1_000, n_episodes=1_000):
     current_dir = os.getcwd()
-    file_path = os.path.join(current_dir, '..', 'data', 'simulation_data.h5')
+    file_path = os.path.join(current_dir, '..', '..', 'data', 'simulation_data.h5')
     
     with h5py.File(file_path, 'a') as file:
         if groupname in file:
