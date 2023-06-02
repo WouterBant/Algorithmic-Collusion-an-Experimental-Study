@@ -180,7 +180,7 @@ class Cycle_Classifier:
                 subcompetitive_cycles.append(cycle)
         return [(cycle, self.found_cycles[cycle]) for cycle in subcompetitive_cycles]
     
-    def mean_variance_calculator(self, metric):
+    def standardized_mean_variance_calculator(self, metric):
         """
         Calculates the mean and variance of a given metric for all cycles, taking into account the number of occurrences.
 
@@ -191,12 +191,15 @@ class Cycle_Classifier:
             tuple: A tuple containing the mean and variance of the metric.
         """
         idx = 0 if metric == Metric.Profit else 2 if metric == Metric.Theta else 4
+        collusive_value = 4.5 if metric == Metric.Profit else 1 if metric == Metric.Theta else 1.5
+        competitive_value = 3 if metric == Metric.Profit else 0 if metric == Metric.Theta else 2
         vals = []
         for cycle in self.found_cycles.keys():
             som = 0
             for i in cycle:
                 som += i[idx] + i[idx+1]
-            v = som / (2 * len(cycle))
+            a = som / (2 * len(cycle))
+            v = (a - competitive_value) / (collusive_value - competitive_value)
             for _ in range(self.found_cycles[cycle]):
                 vals.append(v)
         return (statistics.mean(vals), statistics.variance(vals))
@@ -208,7 +211,7 @@ class Cycle_Classifier:
         Returns:
             tuple: A tuple containing the mean and variance of the profit metric.
         """
-        return self.mean_variance_calculator(Metric.Profit)
+        return self.standardized_mean_variance_calculator(Metric.Profit)
     
     def mean_variance_theta(self):
         """
@@ -217,7 +220,7 @@ class Cycle_Classifier:
         Returns:
             tuple: A tuple containing the mean and variance of the theta metric.
         """
-        return self.mean_variance_calculator(Metric.Theta)
+        return self.standardized_mean_variance_calculator(Metric.Theta)
     
     def mean_variance_q(self):
         """
@@ -226,4 +229,4 @@ class Cycle_Classifier:
         Returns:
             tuple: A tuple containing the mean and variance of the production quantity metric.
         """
-        return self.mean_variance_calculator(Metric.Production_quantity)
+        return self.standardized_mean_variance_calculator(Metric.Production_quantity)
