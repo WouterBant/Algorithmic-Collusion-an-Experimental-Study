@@ -63,3 +63,18 @@ class Environment:
         c1, c2 = self.C(action1.theta, action2.theta)
         pi1, pi2 = action1.q*p1-c1, action2.q*p2-c2
         return (pi1, pi2)
+    
+    def get_profit(self):
+        collusive_value = (self.Xi**2) / (8 * self.Mu)
+        competitive_value = ((self.Xi**2) / (9 * self.Mu)) * (1 - (self.Lambda**2) / (4 * self.Mu * self.Phi))
+        return (collusive_value, competitive_value)
+    
+    def get_theta(self):
+        collusive_value = 1
+        competitive_value = 1 - (self.Lambda * self.Xi) / (6 * self.Mu * self.Phi)
+        return (collusive_value, competitive_value)
+
+    def get_q(self):
+        collusive_value = self.Xi / (4 * self.Mu)
+        competitive_value = self.Xi / (3 * self.Mu)
+        return (collusive_value, competitive_value)

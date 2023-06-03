@@ -11,7 +11,7 @@ class Metric(Enum):
 class Cycle_Classifier:
     """ Class for cycle classification and analysis. """
 
-    def __init__(self, pi1_L, pi2_L, theta1_L, theta2_L, q1_L, q2_L):
+    def __init__(self, env, pi1_L, pi2_L, theta1_L, theta2_L, q1_L, q2_L):
         """
         Initializes the Cycle_Classifier object.
 
@@ -23,6 +23,7 @@ class Cycle_Classifier:
             q1_L (list): List of floats.
             q2_L (list): List of floats.
         """
+        self.env = env
         self.found_cycles = dict()
         self.create_dictionary(pi1_L, pi2_L, theta1_L, theta2_L, q1_L, q2_L)
 
@@ -190,9 +191,16 @@ class Cycle_Classifier:
         Returns:
             tuple: A tuple containing the mean and variance of the metric.
         """
-        idx = 0 if metric == Metric.Profit else 2 if metric == Metric.Theta else 4
-        collusive_value = 4.5 if metric == Metric.Profit else 1 if metric == Metric.Theta else 1.5
-        competitive_value = 3 if metric == Metric.Profit else 0 if metric == Metric.Theta else 2
+        if metric == Metric.Profit:
+            collusive_value, competitive_value = self.env.get_profit()
+            idx = 0
+        elif metric == Metric.Theta:
+            collusive_value, competitive_value = self.env.get_theta()
+            idx = 2
+        else:
+            collusive_value, competitive_value = self.env.get_q()
+            idx = 4
+        
         vals = []
         for cycle in self.found_cycles.keys():
             som = 0
