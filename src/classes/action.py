@@ -18,3 +18,24 @@ class Action:
             int: Hash value of the Action object.
         """
         return hash((self.q, self.theta))
+
+    def __eq__(self, other):
+        """
+        Compares two Action objects for equality based on their q and theta values.
+
+        Args:
+            other (Action): The other Action object to compare.
+
+        Returns:
+            bool: True if the Action objects are equal, False otherwise.
+        """
+        return isinstance(other, Action) and self.q == other.q and self.theta == other.theta
+    
+    def __repr__(self):
+        """
+        Returns a string representation of the Action object.
+
+        Returns:
+            str: String representation of the Action object.
+        """
+        return f"Action(q={self.q}, theta={self.theta})"

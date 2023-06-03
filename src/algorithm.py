@@ -5,7 +5,7 @@ import os
 import h5py
 
 
-def create_actions(Qs, k):
+def create_actions(Qs, Thetas):
     """
     Creates a np array of possible actions based on:
         - The set of possible production quantities (Qs). 
@@ -18,14 +18,13 @@ def create_actions(Qs, k):
     Returns:
         np array: An array containing the created actions as Action objects.
     """
-    Thetas = [theta/k for theta in range(k+1)]
     actions_h = [Action(q, theta) for q in Qs for theta in Thetas]
     actions_h.append(Action(0, 1))
     actions = np.array(actions_h)
     return actions
 
 
-def simulate_episode(env, Qs, k=6, gamma=0.9, T=500_000, L=1_000):
+def simulate_episode(env, Qs, Thetas, gamma=0.9, T=500_000, L=1_000):
     """
     Simulates an episode of the game.
 
@@ -47,7 +46,7 @@ def simulate_episode(env, Qs, k=6, gamma=0.9, T=500_000, L=1_000):
             - q2_L (list): List of production quantities for player 2.
     """
     # Create the set of available actions
-    actions = create_actions(Qs, k)
+    actions = create_actions(Qs, Thetas)
 
     # Pick the first two prices of both players randomly
     Action1, Action2, Action1_next, Action2_next = np.random.choice(actions, size=4)
@@ -124,7 +123,7 @@ def simulate_episode(env, Qs, k=6, gamma=0.9, T=500_000, L=1_000):
             pi1_t, pi2_t, theta1_t, theta2_t, q1_t, q2_t)
 
 
-def simulate_episodes(groupname, env, Qs, k=6, gamma=0.9, T=500_000, L=1_000, n_episodes=1_000):
+def simulate_episodes(groupname, env, Qs, Thetas, gamma=0.9, T=500_000, L=1_000, n_episodes=1_000):
     current_dir = os.getcwd()
     file_path = os.path.join(current_dir, '..', '..', 'data', 'simulation_data.h5')
     
@@ -151,7 +150,7 @@ def simulate_episodes(groupname, env, Qs, k=6, gamma=0.9, T=500_000, L=1_000, n_
 
         for i in range(n_episodes):
             print(i)
-            pi1_L, pi2_L, theta1_L, theta2_L, q1_L, q2_L, pi1_t, pi2_t, theta1_t, theta2_t, q1_t, q2_t = simulate_episode(env, Qs, k, gamma, T, L)
+            pi1_L, pi2_L, theta1_L, theta2_L, q1_L, q2_L, pi1_t, pi2_t, theta1_t, theta2_t, q1_t, q2_t = simulate_episode(env, Qs, Thetas, gamma, T, L)
             pi1_L_dataset[i] = pi1_L
             pi2_L_dataset[i] = pi2_L
             theta1_L_dataset[i] = theta1_L

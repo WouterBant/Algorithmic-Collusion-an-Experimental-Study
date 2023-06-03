@@ -59,7 +59,7 @@ def visualize_cycle(cycle):
     plt.show()
 
 
-def visualize_convergence_over_T(env, groupname):
+def visualize_convergence_over_T(env, groupname, gamma):
     current_dir = os.getcwd()
     file_path = os.path.join(current_dir, '..', '..', 'data', 'simulation_data.h5')
 
@@ -131,7 +131,7 @@ def visualize_convergence_over_T(env, groupname):
     plt.xlabel('Number of Iterations (in 1000s)')
     # plt.ylabel('Average')
     plt.title('Convergence over Time')
-    text = f'γ = 0.9, ξ = {env.Xi}, μ = {env.Mu}, λ = {env.Lambda}, φ = {env.Phi}'
+    text = f'γ = {gamma}, ξ = {env.Xi}, μ = {env.Mu}, λ = {env.Lambda}, φ = {env.Phi}'
     plt.annotate(text, xy=(0.5, 0.05), xycoords='axes fraction', ha='center', va='bottom')
     plt.legend()
     plt.show()
