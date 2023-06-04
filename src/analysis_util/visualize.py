@@ -39,7 +39,6 @@ def visualize_cycle(cycle):
     q1_cycle *= a
     q2_cycle *= a
 
-
     plt.figure(figsize=(10, 6))
 
     # Plot for player 1
@@ -129,7 +128,6 @@ def visualize_convergence_over_T(env, groupname, gamma):
                     color='r', alpha=0.1)
 
     plt.xlabel('Number of Iterations (in 1000s)')
-    # plt.ylabel('Average')
     plt.title('Convergence over Time')
     text = f'γ = {gamma}, ξ = {env.Xi}, μ = {env.Mu}, λ = {env.Lambda}, φ = {env.Phi}'
     plt.annotate(text, xy=(0.5, 0.05), xycoords='axes fraction', ha='center', va='bottom')
