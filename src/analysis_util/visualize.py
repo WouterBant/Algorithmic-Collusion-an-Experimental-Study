@@ -81,10 +81,11 @@ def visualize_convergence_over_T(env, groupname, gamma):
     mean_profit = np.mean(profit, axis=0)
     std_profit = np.std(profit, axis=0)
 
+    l = len(profit)
+    
     # Calculate the confidence interval for profit
-    confidence_interval_profit = 1.96 * std_profit / np.sqrt(2000)
+    confidence_interval_profit = 1.96 * std_profit / np.sqrt(l)
 
-    # Example q (1000 by 55 array)
     q = np.vstack((q1_t, q2_t))
     collusive_q, competitive_q = env.get_q()
     q = (q - competitive_q) / (collusive_q - competitive_q)
@@ -94,7 +95,7 @@ def visualize_convergence_over_T(env, groupname, gamma):
     std_q = np.std(q, axis=0)
 
     # Calculate the confidence interval for q
-    confidence_interval_q = 1.96 * std_q / np.sqrt(2000)
+    confidence_interval_q = 1.96 * std_q / np.sqrt(l)
 
     # Example theta (1000 by 55 array)
     theta = np.vstack((theta1_t, theta2_t))
@@ -106,7 +107,7 @@ def visualize_convergence_over_T(env, groupname, gamma):
     std_theta = np.std(theta, axis=0)
 
     # Calculate the confidence interval for theta
-    confidence_interval_theta = 1.96 * std_theta / np.sqrt(2000)
+    confidence_interval_theta = 1.96 * std_theta / np.sqrt(l)
 
     # Plotting the mean with confidence intervals
     x = np.linspace(0, 500000, 55) / 1000  # x-axis values
@@ -178,7 +179,6 @@ def visualize_over_gamma(env, gamma_files):
     profit_ci = 1.96 * np.sqrt(profit_variance) / np.sqrt(1000)  # profit confidence interval
     theta_ci = 1.96 * np.sqrt(theta_variance) / np.sqrt(1000)  # theta confidence interval
     q_ci = 1.96 * np.sqrt(q_variance) / np.sqrt(1000)  # q confidence interval
-
     fig, ax = plt.subplots()
 
     # Plotting profit

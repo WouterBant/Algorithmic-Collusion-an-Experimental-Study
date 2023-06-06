@@ -5,7 +5,7 @@ from statistics import mean
 class Regulator:
     """ Regulator agent in the artificial market. """
 
-    def __init__(self, env, omega=1, kappa=1, delta=1.1, production_quota=0.1, CSR_quota=0.3, evaluation_period=5):
+    def __init__(self, env, omega=1, kappa=1, delta=1.1, production_quota=0.15, CSR_quota=0.15, evaluation_period=5):
         """
         Initializes a Regulator.
 
@@ -71,9 +71,9 @@ class Regulator:
             if reward > self.budget:
                 reward = 0
             else:
-                self.budget -= reward
+                self.budget -= 2*reward
         else:
             self.consecutive_violations += 1
             reward = reward_h * (self.delta ** self.consecutive_violations)
-            self.budget -= reward  # Increase in budget when violation
+            self.budget -= 2*reward  # Increase in budget when violation
         return reward
