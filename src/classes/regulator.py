@@ -5,7 +5,7 @@ from statistics import mean
 class Regulator:
     """ Regulator agent in the artificial market. """
 
-    def __init__(self, env, omega=1, kappa=1, delta=1.1, production_quota=0.15, CSR_quota=0.15, evaluation_period=5):
+    def __init__(self, env, omega=1, kappa=3, delta=1.1, production_quota=0.15, CSR_quota=0.15, evaluation_period=5):
         """
         Initializes a Regulator.
 
