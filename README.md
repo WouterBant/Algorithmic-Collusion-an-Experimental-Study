@@ -24,4 +24,4 @@ pip install -r requirements.txt
 
   * [/runs](src/runs): contains the analysis of different runs and shows the figures presented in the paper.
 
-  * [algorithms.py](src/algorithms.py): contains the algorithms used to simulate episodes in the different settings discussed in the papers.
+  * [algorithms.py](src/algorithms.py): contains the algorithms used to simulate episodes in the different settings discussed in the paper.
