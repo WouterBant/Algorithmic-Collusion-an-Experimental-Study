@@ -70,8 +70,6 @@ def simulate_episode_Qlearning(env, Qs, Thetas, gamma=0.9, T=500_000, L=100):
             # Calculate the current profits
             pi1, pi2 = env.Pi(current_action1, current_action2)
             
-            # With regulator subtract penalties here
-
             # Calculate the next profit
             pi1_next, _ = env.Pi(current_action1, Action2_next)
 
@@ -230,7 +228,7 @@ def simulate_episode_DQN(env, Qs, Thetas, gamma=0.9, T=100_000, L=100):
             pi1_t, pi2_t, theta1_t, theta2_t, q1_t, q2_t)
 
 
-def simulate_episode_with_regulator(env, Qs, Thetas, gamma=0.9, T=500_000, L=100):
+def simulate_episode_with_regulator(env, Qs, Thetas, gamma=0.9, T=500_000, L=100, omega=1, kappa=3, delta=1.1, production_quota=0.15, CSR_quota=0.15, evaluation_period=5):
     """
     Simulates an episode of the game with a regulator.
 
@@ -262,8 +260,8 @@ def simulate_episode_with_regulator(env, Qs, Thetas, gamma=0.9, T=500_000, L=100
     Agent2 = Qlearning.Agent(actions, gamma)
 
     # Create a regulator for both agents
-    Regulator1 = Regulator(env)
-    Regulator2 = Regulator(env)
+    Regulator1 = Regulator(env, omega, kappa, delta, production_quota, CSR_quota, evaluation_period)
+    Regulator2 = Regulator(env, omega, kappa, delta, production_quota, CSR_quota, evaluation_period)
 
     # Keep track of metrics
     pi1_ep, pi2_ep = [], []
