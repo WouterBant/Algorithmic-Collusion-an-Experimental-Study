@@ -24,7 +24,9 @@ class Cycle_Classifier:
             q2_L (list): List of floats.
         """
         self.env = env
+        self.collusive_profit, self.competitive_profit = env.get_profit()
         self.found_cycles = dict()
+        self.total_number_of_cycles = len(pi1_L)
         self.create_dictionary(pi1_L, pi2_L, theta1_L, theta2_L, q1_L, q2_L)
 
     def identify_cycle(self, cur_pi1, cur_pi2, cur_theta1, cur_theta2, cur_q1, cur_q2):
@@ -113,7 +115,7 @@ class Cycle_Classifier:
         Returns:
             int: Number of different cycles found in the 1,000 episodes.
         """
-        return len(self.found_cycles)
+        return len(self.found_cycles) / self.total_number_of_cycles
     
     def most_found_cycle(self):
         """
@@ -162,8 +164,14 @@ class Cycle_Classifier:
             elif cur_profit > highest_profit:
                 highest_profit = cur_profit
                 highest_profitable_cycles = [cycle]
-        return [highest_profit] + [(cycle, self.found_cycles[cycle]) for cycle in highest_profitable_cycles]
+        return [highest_profit] + [(cycle, self.found_cycles[cycle]/self.total_number_of_cycles) for cycle in highest_profitable_cycles]
     
+    def highest_possible_profits(self):
+        highest = self.most_profitable_cycle()
+        if highest[0] == self.collusive_profit:
+            return highest[1][1]
+        return 0
+
     def subcompetitive_profit_cycles(self):
         """
         Identifies all subcompetitive profit cycles.
@@ -172,14 +180,30 @@ class Cycle_Classifier:
             list: List of tuples containing cycles with subcompetitive profits and their number of occurrences.
         """
         subcompetitive_cycles = []
+        res = 0
         for cycle in self.found_cycles.keys():
             cur_profit = 0
             for i in cycle:
                 cur_profit += i[0] + i[1]
             cur_profit /= (2 * len(cycle))
-            if cur_profit <= 3:
+            if cur_profit <= self.competitive_profit:
                 subcompetitive_cycles.append(cycle)
-        return [(cycle, self.found_cycles[cycle]) for cycle in subcompetitive_cycles]
+                res += self.found_cycles[cycle]
+        return [res / self.total_number_of_cycles] + [(cycle, self.found_cycles[cycle]) for cycle in subcompetitive_cycles]
+    
+    def unilateral_subcompetitive_profit_cycles(self):
+        res = 0
+        for cycle in self.found_cycles.keys():
+            cur_profit1 = 0
+            cur_profit2 = 0
+            for i in cycle:
+                cur_profit1 += i[0]
+                cur_profit2 += i[1]
+            cur_profit1 /= len(cycle)
+            cur_profit2 /= len(cycle)
+            if cur_profit1 <= self.competitive_profit or cur_profit2 <= self.competitive_profit:
+                res += 1
+        return res / self.total_number_of_cycles
     
     def standardized_mean_variance_calculator(self, metric):
         """
@@ -211,6 +235,13 @@ class Cycle_Classifier:
             for _ in range(self.found_cycles[cycle]):
                 vals.append(v)
         return (statistics.mean(vals), statistics.variance(vals))
+    
+    def cycles_length_one(self):
+        res = 0
+        for cycle in self.found_cycles.keys():
+            if len(cycle) == 1:
+                res += 1
+        return res / self.total_number_of_cycles
     
     def mean_variance_profit(self):
         """
