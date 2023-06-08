@@ -67,9 +67,10 @@ class Regulator:
             self.consecutive_violations = -1
             reward = reward_h * (self.delta ** self.consecutive_violations)
 
-            # Do not reward when there is no budget for it
-            if reward > self.budget:
-                reward = 0
+            # Do not reward more than the budget
+            if 2*reward > self.budget:
+                reward = self.budget / 2
+                self.budget = 0
             else:
                 self.budget -= 2*reward
         else:
