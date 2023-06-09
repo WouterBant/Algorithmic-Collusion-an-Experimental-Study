@@ -27,7 +27,18 @@ class Cycle_Classifier:
         self.collusive_profit, self.competitive_profit = env.get_profit()
         self.found_cycles = dict()
         self.total_number_of_cycles = len(pi1_L)
+        self.taking_turns = 0
+        # pi1_L, pi2_L, theta1_L, theta2_L = self.clean_data(pi1_L, pi2_L, theta1_L, theta2_L)  Does not influence results
         self.create_dictionary(pi1_L, pi2_L, theta1_L, theta2_L, q1_L, q2_L)
+
+    def clean_data(self, pi1_L, pi2_L, theta1_L, theta2_L):
+        for r in range(len(pi1_L)):
+            for c in range(len(pi1_L[0])):
+                pi1_L[r][c] = round(pi1_L[r][c], 3)
+                pi2_L[r][c] = round(pi2_L[r][c], 3)
+                theta1_L[r][c] = round(theta1_L[r][c], 3)
+                theta2_L[r][c] = round(theta2_L[r][c], 3)
+        return (pi1_L, pi2_L, theta1_L, theta2_L)
 
     def identify_cycle(self, cur_pi1, cur_pi2, cur_theta1, cur_theta2, cur_q1, cur_q2):
         """
@@ -46,10 +57,16 @@ class Cycle_Classifier:
         """
         start = len(cur_pi1)-1
         cycle_found = False
+        q01 = False
+        q02 = False
         while not cycle_found:
             cycle = []
             for t in range(start, -1, -1):
                 cur_play = (cur_pi1[t], cur_pi2[t], cur_theta1[t], cur_theta2[t], cur_q1[t], cur_q2[t])
+                if cur_q1[t] == 0:
+                    q01 = True
+                if cur_q2[t] == 0:
+                    q02 = True
                 # When the current state was also the first state, a cycle has been found
                 if len(cycle) > 0 and cur_play == cycle[0]:
                     cycle_found = True
@@ -57,6 +74,8 @@ class Cycle_Classifier:
                 # Otherwise add the current state to the cycle being created
                 cycle.append(cur_play)
             start -= 15
+        if q01 and q02:
+            self.taking_turns += 1
         return cycle[::-1]
     
     def alternative_cycle(self, pattern):
@@ -171,6 +190,9 @@ class Cycle_Classifier:
         if highest[0] == self.collusive_profit:
             return highest[1][1]
         return 0
+    
+    def taking_turns_found(self):
+        return self.taking_turns / self.total_number_of_cycles
 
     def subcompetitive_profit_cycles(self):
         """
