@@ -72,67 +72,79 @@ def visualize_convergence_over_T(env, groupname, gamma):
 
     file.close()
 
-    # Example profit (1000 by 55 array)
-    profit = np.vstack((pi1_t, pi2_t))
+    profit = np.array([])
+    q = np.array([])
+    theta = np.array([])
+
+    profit_h = np.vstack((pi1_t, pi2_t))
+    q_h = np.vstack((q1_t, q2_t))
+    theta_h = np.vstack((theta1_t, theta2_t))
+
+    for r in range(len(profit_h)):
+        row_profit = np.array([])
+        row_q = np.array([])
+        row_theta = np.array([])
+        
+        for c in range(11):
+            avg_profit = np.mean(profit_h[r, c*5:c*5+5])
+            avg_q = np.mean(q_h[r, c*5:c*5+5])
+            avg_theta = np.mean(theta_h[r, c*5:c*5+5])
+            row_profit = np.append(row_profit, avg_profit)
+            row_q = np.append(row_q, avg_q)
+            row_theta = np.append(row_theta, avg_theta)
+        
+        profit = np.vstack((profit, row_profit)) if profit.size else row_profit
+        q = np.vstack((q, row_q)) if q.size else row_q
+        theta = np.vstack((theta, row_theta)) if theta.size else row_theta
+                
     collusive_profit, competitive_profit = env.get_profit()
     profit = (profit - competitive_profit) / (collusive_profit - competitive_profit)
 
-    # Compute the mean and standard deviation along axis 0 for profit
     mean_profit = np.mean(profit, axis=0)
     std_profit = np.std(profit, axis=0)
 
     l = len(profit)
     
-    # Calculate the confidence interval for profit
     confidence_interval_profit = 1.96 * std_profit / np.sqrt(l)
 
-    q = np.vstack((q1_t, q2_t))
     collusive_q, competitive_q = env.get_q()
     q = (q - competitive_q) / (collusive_q - competitive_q)
 
-    # Compute the mean and standard deviation along axis 0 for q
     mean_q = np.mean(q, axis=0)
     std_q = np.std(q, axis=0)
 
-    # Calculate the confidence interval for q
     confidence_interval_q = 1.96 * std_q / np.sqrt(l)
-
-    # Example theta (1000 by 55 array)
-    theta = np.vstack((theta1_t, theta2_t))
+    
     collusive_theta, competitive_theta = env.get_theta()
     theta = (theta - competitive_theta) / (collusive_theta - competitive_theta)
 
-    # Compute the mean and standard deviation along axis 0 for theta
     mean_theta = np.mean(theta, axis=0)
     std_theta = np.std(theta, axis=0)
 
-    # Calculate the confidence interval for theta
     confidence_interval_theta = 1.96 * std_theta / np.sqrt(l)
 
-    # Plotting the mean with confidence intervals
-    x = np.linspace(0, 500000, 55) / 1000  # x-axis values
+    x = np.array([0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500])
     fig, ax = plt.subplots()
 
-    # Plotting the mean values for profit
-    ax.plot(x, mean_profit, color='b', label='∆')
-    ax.fill_between(x, mean_profit - confidence_interval_profit, mean_profit + confidence_interval_profit,
+    ax.plot(x, mean_profit.T, 'bo', linestyle=':', label='∆')
+    ax.fill_between(x, mean_profit.T - confidence_interval_profit.T, mean_profit.T + confidence_interval_profit.T,
                     color='b', alpha=0.1)
 
-    # Plotting the mean values for q
-    ax.plot(x, mean_q, color='g', label='Ψ')
-    ax.fill_between(x, mean_q - confidence_interval_q, mean_q + confidence_interval_q,
+    ax.plot(x, mean_q.T, 'go', linestyle=':', label='Ψ')
+    ax.fill_between(x, mean_q.T - confidence_interval_q.T, mean_q.T + confidence_interval_q.T,
                     color='g', alpha=0.1)
 
-    # Plotting the mean values for theta
-    ax.plot(x, mean_theta, color='r', label='Υ')
-    ax.fill_between(x, mean_theta - confidence_interval_theta, mean_theta + confidence_interval_theta,
+    ax.plot(x, mean_theta.T, 'ro', linestyle=':', label='Υ')
+    ax.fill_between(x, mean_theta.T - confidence_interval_theta.T, mean_theta.T + confidence_interval_theta.T,
                     color='r', alpha=0.1)
-
-    plt.xlabel('Number of Iterations (in 1000s)')
-    plt.title('Convergence over Time')
+    ax.axhline(y=0, color='k', linestyle='--', alpha=0.3)
+    plt.xlabel('Number of Iterations (in 1000s)', fontsize=12)
+    plt.title('Convergence During Episodes', fontsize=15)
+    plt.xticks(x, fontsize=12)
+    plt.yticks(fontsize=13)
     text = f'γ = {gamma}, ξ = {env.Xi}, μ = {env.Mu}, λ = {env.Lambda}, φ = {env.Phi}'
-    plt.annotate(text, xy=(0.5, 0.05), xycoords='axes fraction', ha='center', va='bottom')
-    plt.legend()
+    plt.annotate(text, xy=(0.5, 0.05), xycoords='axes fraction', ha='center', va='bottom', fontsize=12)
+    plt.legend(fontsize=12)
     plt.show()
 
 def visualize_over_gamma(env, gamma_files):
@@ -181,22 +193,22 @@ def visualize_over_gamma(env, gamma_files):
     q_ci = 1.96 * np.sqrt(q_variance) / np.sqrt(1000)  # q confidence interval
     fig, ax = plt.subplots()
 
-    # Plotting profit
-    ax.plot(x, profit_mean, color='b', label='Δ')
-    ax.fill_between(x, (profit_mean - profit_ci), (profit_mean + profit_ci), color='b', alpha=.1)
+    ax.plot(x, profit_mean, 'bo--', label='Δ')
+    ax.plot(x, q_mean, 'go--', label='Ψ')
+    ax.plot(x, theta_mean, 'ro--', label='Υ')
 
-    # Plotting q
-    ax.plot(x, q_mean, color='g', label='Ψ')
-    ax.fill_between(x, (q_mean - q_ci), (q_mean + q_ci), color='g', alpha=.1)
-
-    # Plotting theta
-    ax.plot(x, theta_mean, color='r', label='Υ')
-    ax.fill_between(x, (theta_mean - theta_ci), (theta_mean + theta_ci), color='r', alpha=.1)
+    ax.fill_between(x, (profit_mean - profit_ci), (profit_mean + profit_ci), color='b', alpha=0.1)
+    ax.fill_between(x, (q_mean - q_ci), (q_mean + q_ci), color='g', alpha=0.1)
+    ax.fill_between(x, (theta_mean - theta_ci), (theta_mean + theta_ci), color='r', alpha=0.1)
 
     # Adding legend and showing the plot
-    ax.legend()
-    plt.xlabel('Discount Factor (γ)')
-    plt.title("Converged Metric Values for different Discount Factors (γ's)")
+    ax.legend(loc='lower right')
+    ax.axvline(x=0.9, color='k', linestyle='--', alpha=0.3)
+    plt.xlabel('Discount Factor (γ)', fontsize=12)
+    plt.title("Converged Metric Values", fontsize=15)
+    plt.xlim(0.74, 0.99)
+    plt.xticks([0.75, 0.8, 0.85, 0.9, 0.95, 0.98], fontsize=12)
+    plt.yticks(fontsize=13)
     text = f'ξ = {env.Xi}, μ = {env.Mu}, λ = {env.Lambda}, φ = {env.Phi}'
-    plt.annotate(text, xy=(0.95, 0.05), xycoords='axes fraction', ha='right', va='bottom')
+    plt.annotate(text, xy=(0.50, 0.90), xycoords='axes fraction', ha='right', va='bottom', fontsize=13)
     plt.show()
