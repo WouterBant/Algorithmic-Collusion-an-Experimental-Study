@@ -341,7 +341,7 @@ def simulate_episode_with_regulator(env, Qs, Thetas, gamma=0.9, T=500_000, L=100
             pi1_t, pi2_t, theta1_t, theta2_t, q1_t, q2_t)
 
 
-def simulate_episodes(groupname, env, Qs, Thetas, gamma=0.9, T=500_000, L=100, n_episodes=1_000):
+def simulate_episodes(groupname, env, Qs, Thetas, gamma=0.9, T=500_000, L=100, n_episodes=1_000, kappa=1):
     current_dir = os.getcwd()
     file_path = os.path.join(current_dir, '..', '..', 'data', 'simulation_data.h5')
     
@@ -372,8 +372,8 @@ def simulate_episodes(groupname, env, Qs, Thetas, gamma=0.9, T=500_000, L=100, n
         for i in range(n_episodes):
             print(i)
             pi1_L, pi2_L, theta1_L, theta2_L, q1_L, q2_L, \
-            pi1_t, pi2_t, theta1_t, theta2_t, q1_t, q2_t, Q1, Q2 = \
-            simulate_episode_Qlearning(env, Qs, Thetas, gamma)
+            pi1_t, pi2_t, theta1_t, theta2_t, q1_t, q2_t = \
+            simulate_episode_with_regulator(env, Qs, Thetas, gamma, kappa=kappa)
             # if Qlearning:
             #     pi1_L, pi2_L, theta1_L, theta2_L, q1_L, q2_L, \
             #     pi1_t, pi2_t, theta1_t, theta2_t, q1_t, q2_t = \

@@ -202,7 +202,7 @@ class Cycle_Classifier:
             cur_profit1 /= len(cycle)
             cur_profit2 /= len(cycle)
             if cur_profit1 <= self.competitive_profit or cur_profit2 <= self.competitive_profit:
-                res += 1
+                res += self.found_cycles[cycle]
         return res / self.total_number_of_cycles
     
     def standardized_mean_variance_calculator(self, metric):
