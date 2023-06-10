@@ -1,5 +1,5 @@
 # BSc Thesis
-# Algorithmic Collusion: An Experimental Study of Firms' CSR Investment Decisions and an Innovative Regulatory Framework
+## Algorithmic Collusion: An Experimental Study of Firms' CSR Investment Decisions and an Innovative Regulatory Framework
 
 In progress
 
