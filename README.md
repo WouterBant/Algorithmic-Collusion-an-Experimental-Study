@@ -1,10 +1,10 @@
-# BSc Thesis, Algorithmic Collusion: A Computational Study of Firms' CSR Investment Decisions
+# BSc Thesis
+# Algorithmic Collusion: An Experimental Study of Firms' CSR Investment Decisions and an Innovative Regulatory Framework
 
 In progress
 
 ## About
-This repo presents the code used to obtain the results from the paper: Algorithmic Collusion: A Computational Study of Firm’ CSR
-Investment Decisions. This paper researches algorithmic collusion of Artificial Intelligence Algorithms in a duopoly setting where firms let these algorithms completely decide their production quantity and investment in Corporate Social Responsibility.
+This repo presents the code used to obtain the results from the paper: Algorithmic Collusion: An Experimental Study of Firms' CSR Investment Decisions and an Innovative Regulatory Framework. This paper researches algorithmic collusion of Artificial Intelligence Algorithms in a duopoly setting where firms let these algorithms completely decide their production quantity and investment in Corporate Social Responsibility.
 
 ## Structure
 
