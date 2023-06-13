@@ -126,15 +126,15 @@ def visualize_convergence_over_T(env, groupname, gamma):
     x = np.array([0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500])
     fig, ax = plt.subplots()
 
-    ax.plot(x, mean_profit.T, 'bo', linestyle=':', label='∆')
+    ax.plot(x, mean_profit.T, 'bo--', label='∆')
     ax.fill_between(x, mean_profit.T - confidence_interval_profit.T, mean_profit.T + confidence_interval_profit.T,
                     color='b', alpha=0.1)
 
-    ax.plot(x, mean_q.T, 'go', linestyle=':', label='Ψ')
+    ax.plot(x, mean_q.T, 'go--', label='Ψ')
     ax.fill_between(x, mean_q.T - confidence_interval_q.T, mean_q.T + confidence_interval_q.T,
                     color='g', alpha=0.1)
 
-    ax.plot(x, mean_theta.T, 'ro', linestyle=':', label='Υ')
+    ax.plot(x, mean_theta.T, 'ro--', label='Υ')
     ax.fill_between(x, mean_theta.T - confidence_interval_theta.T, mean_theta.T + confidence_interval_theta.T,
                     color='r', alpha=0.1)
     ax.axhline(y=0, color='k', linestyle='--', alpha=0.3)
@@ -144,10 +144,10 @@ def visualize_convergence_over_T(env, groupname, gamma):
     plt.yticks(fontsize=13)
     text = f'γ = {gamma}, ξ = {env.Xi}, μ = {env.Mu}, λ = {env.Lambda}, φ = {env.Phi}'
     plt.annotate(text, xy=(0.5, 0.05), xycoords='axes fraction', ha='center', va='bottom', fontsize=12)
-    plt.legend(fontsize=12)
+    plt.legend(loc='lower right', fontsize=12)
     plt.show()
 
-def visualize_over_gamma(env, gamma_files):
+def visualize_over_gamma(env, gamma_files, extra_space=0):
     profit = []
     q = []
     theta = []
@@ -202,7 +202,7 @@ def visualize_over_gamma(env, gamma_files):
     ax.fill_between(x, (theta_mean - theta_ci), (theta_mean + theta_ci), color='r', alpha=0.1)
 
     # Adding legend and showing the plot
-    ax.legend(loc='lower right')
+    ax.legend(loc='lower right', fontsize=12)
     ax.axvline(x=0.9, color='k', linestyle='--', alpha=0.3)
     plt.xlabel('Discount Factor (γ)', fontsize=12)
     plt.title("Converged Metric Values", fontsize=15)
@@ -210,5 +210,5 @@ def visualize_over_gamma(env, gamma_files):
     plt.xticks([0.75, 0.8, 0.85, 0.9, 0.95, 0.98], fontsize=12)
     plt.yticks(fontsize=13)
     text = f'ξ = {env.Xi}, μ = {env.Mu}, λ = {env.Lambda}, φ = {env.Phi}'
-    plt.annotate(text, xy=(0.50, 0.90), xycoords='axes fraction', ha='right', va='bottom', fontsize=13)
+    plt.annotate(text, xy=(0.50+extra_space, 0.90), xycoords='axes fraction', ha='right', va='bottom', fontsize=13)
     plt.show()
