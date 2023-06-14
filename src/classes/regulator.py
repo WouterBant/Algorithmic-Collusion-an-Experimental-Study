@@ -10,7 +10,13 @@ class Regulator:
         Initializes a Regulator.
 
         Args:
-            actions (np array): List of available actions.
+            env: An instance of the environment class.
+            omega (float): Parameter in the penalty equation.
+            kappa (float): Parameter in the penalty equation.
+            delta (float): Parameter in the penalty equation.
+            production_quota (float): Threshold for acceptable collusion in terms of production.
+            CSR_quota (float): Threshold for acceptable collusion in terms of CSR (Corporate Social Responsibility).
+            evaluation_period (int): Number of past periods considered for evaluation.
         """
         # Parameters in the penalty equation
         self.omega = omega
@@ -43,7 +49,7 @@ class Regulator:
             action (Action): The action containing theta and q values to enforce.
             
         Returns:
-            float: The penalty value for violating regulations.
+            float: The reward or punishment.
         """
         self.thetas.append(action.theta)
         self.qs.append(action.q)

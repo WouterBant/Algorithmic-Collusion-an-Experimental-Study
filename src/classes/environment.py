@@ -65,16 +65,34 @@ class Environment:
         return (pi1, pi2)
     
     def get_profit(self):
+        """
+        Calculates the profit values for the collusive and competitive cases.
+
+        Returns:
+            tuple: A tuple containing the profit value for the collusive case and the competitive case.
+        """
         collusive_value = (self.Xi**2) / (8 * self.Mu)
         competitive_value = ((self.Xi**2) / (9 * self.Mu)) * (1 - (self.Lambda**2) / (4 * self.Mu * self.Phi))
         return (collusive_value, competitive_value)
     
     def get_theta(self):
+        """
+        Calculates the theta values for the collusive and competitive cases.
+
+        Returns:
+            tuple: A tuple containing the theta value for the collusive case and the competitive case.
+        """
         collusive_value = 1
         competitive_value = 1 - (self.Lambda * self.Xi) / (6 * self.Mu * self.Phi)
         return (collusive_value, competitive_value)
 
     def get_q(self):
+        """
+        Calculates the q values for the collusive and competitive cases.
+
+        Returns:
+            tuple: A tuple containing the q value for the collusive case and the competitive case.
+        """
         collusive_value = self.Xi / (4 * self.Mu)
         competitive_value = self.Xi / (3 * self.Mu)
         return (collusive_value, competitive_value)

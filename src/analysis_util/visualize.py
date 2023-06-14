@@ -187,10 +187,10 @@ def visualize_over_gamma(env, gamma_files, extra_space=0):
         q_mean = np.append(q_mean, m)
         q_variance = np.append(q_variance, var)
 
-    x = np.array([0.75, 0.8, 0.85, 0.9, 0.95, 0.98])  # x values
-    profit_ci = 1.96 * np.sqrt(profit_variance) / np.sqrt(1000)  # profit confidence interval
-    theta_ci = 1.96 * np.sqrt(theta_variance) / np.sqrt(1000)  # theta confidence interval
-    q_ci = 1.96 * np.sqrt(q_variance) / np.sqrt(1000)  # q confidence interval
+    x = np.array([0.75, 0.8, 0.85, 0.9, 0.95, 0.98]) 
+    profit_ci = 1.96 * np.sqrt(profit_variance) / np.sqrt(1000)
+    theta_ci = 1.96 * np.sqrt(theta_variance) / np.sqrt(1000)
+    q_ci = 1.96 * np.sqrt(q_variance) / np.sqrt(1000)
     fig, ax = plt.subplots()
 
     ax.plot(x, profit_mean, 'bo--', label='Δ')

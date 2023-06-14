@@ -32,6 +32,18 @@ class Cycle_Classifier:
         self.create_dictionary(pi1_L, pi2_L, theta1_L, theta2_L, q1_L, q2_L)
 
     def clean_data(self, pi1_L, pi2_L, theta1_L, theta2_L):
+        """
+        Rounds the values in the input lists to three decimal places.
+
+        Args:
+            pi1_L (list): A list of lists representing the pi1 values.
+            pi2_L (list): A list of lists representing the pi2 values.
+            theta1_L (list): A list of lists representing the theta1 values.
+            theta2_L (list): A list of lists representing the theta2 values.
+
+        Returns:
+            tuple: A tuple containing the modified lists pi1_L, pi2_L, theta1_L, and theta2_L.
+        """
         for r in range(len(pi1_L)):
             for c in range(len(pi1_L[0])):
                 pi1_L[r][c] = round(pi1_L[r][c], 3)
@@ -186,12 +198,23 @@ class Cycle_Classifier:
         return [highest_profit] + [(cycle, self.found_cycles[cycle]/self.total_number_of_cycles) for cycle in highest_profitable_cycles]
     
     def highest_possible_profits(self):
+        """
+        Calculates the highest possible profits based on the most profitable cycle.
+
+        Returns:
+            int: The highest possible profits if the most profitable cycle matches the collusive profit.
+            0: If the most profitable cycle does not match the collusive profit.
+        """
         highest = self.most_profitable_cycle()
         if highest[0] == self.collusive_profit:
             return highest[1][1]
         return 0
     
     def taking_turns_found(self):
+        """
+        Returns:
+            Proportion of times where firms set q=0 in turn.
+        """
         return self.taking_turns / self.total_number_of_cycles
 
     def subcompetitive_profit_cycles(self):
@@ -214,6 +237,10 @@ class Cycle_Classifier:
         return [res / self.total_number_of_cycles] + [(cycle, self.found_cycles[cycle]) for cycle in subcompetitive_cycles]
     
     def unilateral_subcompetitive_profit_cycles(self):
+        """
+        Returns:
+            float: The proportion of times minimum of the individual average profit gain is below the competitive level.
+        """
         res = 0
         for cycle in self.found_cycles.keys():
             cur_profit1 = 0
@@ -259,6 +286,10 @@ class Cycle_Classifier:
         return (statistics.mean(vals), statistics.variance(vals))
     
     def cycles_length_one(self):
+        """
+        Returns:
+            float: The proportion of times the actions cycle consisted of one action of both players.
+        """
         res = 0
         for cycle in self.found_cycles.keys():
             if len(cycle) == 1:

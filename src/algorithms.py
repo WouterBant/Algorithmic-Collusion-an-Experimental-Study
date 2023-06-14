@@ -35,7 +35,7 @@ def simulate_episode_Qlearning(env, Qs, Thetas, gamma=0.9, T=500_000, L=100):
         k (int): Parameter used to create the set of available actions (default: 6).
         gamma (float): Discount factor (default: 0.9).
         T (int): Number of iterations in an episode (default: 500,000).
-        L (int): Number of last runs to collect metrics from (default: 1,000).
+        L (int): Number of last runs to collect metrics from (default: 100).
 
     Returns:
         tuple: A tuple containing the metrics from the last L runs:
@@ -110,7 +110,7 @@ def simulate_episode_Qlearning(env, Qs, Thetas, gamma=0.9, T=500_000, L=100):
     q1_L, q2_L = q1[-L:], q2[-L:]
 
     pi1_t, pi2_t, theta1_t, theta2_t, q1_t, q2_t = [], [], [], [], [], []
-    for i in range(0, T, 49999):
+    for i in range(0, T, 99):
         pi1_t += pi1_ep[i:i+5]
         pi2_t += pi2_ep[i:i+5]
         theta1_t += theta1[i:i+5]
@@ -132,7 +132,7 @@ def simulate_episode_DQN(env, Qs, Thetas, gamma=0.9, T=100_000, L=100):
         k (int): Parameter used to create the set of available actions (default: 6).
         gamma (float): Discount factor (default: 0.9).
         T (int): Number of iterations in an episode (default: 500,000).
-        L (int): Number of last runs to collect metrics from (default: 1,000).
+        L (int): Number of last runs to collect metrics from (default: 100).
 
     Returns:
         tuple: A tuple containing the metrics from the last L runs:
@@ -153,7 +153,7 @@ def simulate_episode_DQN(env, Qs, Thetas, gamma=0.9, T=100_000, L=100):
     Agent1 = DQN.Agent(actions, gamma=gamma)
     Agent2 = DQN.Agent(actions, gamma=gamma)
 
-    batch_size = 32
+    batch_size = 50
 
     # Keep track of metrics
     pi1_ep, pi2_ep = [], []
@@ -161,7 +161,8 @@ def simulate_episode_DQN(env, Qs, Thetas, gamma=0.9, T=100_000, L=100):
     theta1, theta2 = [], []
 
     for t in range(3, T+1):
-        print(t)
+        if t % 50 == 0:
+            print(t, pi1_ep[-1], pi2_ep[-1])
         if t % 2:
             if (t-1) % Agent1.update_rate == 0:
                 Agent1.update_target_network()
@@ -238,7 +239,13 @@ def simulate_episode_with_regulator(env, Qs, Thetas, gamma=0.9, T=500_000, L=100
         k (int): Parameter used to create the set of available actions (default: 6).
         gamma (float): Discount factor (default: 0.9).
         T (int): Number of iterations in an episode (default: 500,000).
-        L (int): Number of last runs to collect metrics from (default: 1,000).
+        L (int): Number of last runs to collect metrics from (default: 100).
+        omega (float): Parameter in the penalty equation.
+        kappa (float): Parameter in the penalty equation.
+        delta (float): Parameter in the penalty equation.
+        production_quota (float): Threshold for acceptable collusion in terms of production.
+        CSR_quota (float): Threshold for acceptable collusion in terms of CSR (Corporate Social Responsibility).
+        evaluation_period (int): Number of past periods considered for evaluation.
 
     Returns:
         tuple: A tuple containing the metrics from the last L runs:
@@ -342,6 +349,9 @@ def simulate_episode_with_regulator(env, Qs, Thetas, gamma=0.9, T=500_000, L=100
 
 
 def simulate_episodes(groupname, env, Qs, Thetas, gamma=0.9, T=500_000, L=100, n_episodes=1_000, kappa=1):
+    """
+    Used to simulate multiple episodes and store the results in an h5 file.
+    """
     current_dir = os.getcwd()
     file_path = os.path.join(current_dir, '..', '..', 'data', 'simulation_data.h5')
     
@@ -373,7 +383,7 @@ def simulate_episodes(groupname, env, Qs, Thetas, gamma=0.9, T=500_000, L=100, n
             print(i)
             pi1_L, pi2_L, theta1_L, theta2_L, q1_L, q2_L, \
             pi1_t, pi2_t, theta1_t, theta2_t, q1_t, q2_t = \
-            simulate_episode_with_regulator(env, Qs, Thetas, gamma, kappa=kappa)
+            simulate_episode_DQN(env, Qs, Thetas, gamma)
             # if Qlearning:
             #     pi1_L, pi2_L, theta1_L, theta2_L, q1_L, q2_L, \
             #     pi1_t, pi2_t, theta1_t, theta2_t, q1_t, q2_t = \

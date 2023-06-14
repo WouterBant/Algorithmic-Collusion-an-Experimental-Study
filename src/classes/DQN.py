@@ -10,7 +10,7 @@ from tensorflow.keras.optimizers import Adam
 class Agent:
     """ Deep Q-Network agent in this Multi-Agent Reinforcement Learning setting.  """
 
-    def __init__(self, actions, state_size=2, action_size=50, bufferLength=5_000, gamma=0.9, learning_rate=0.001, update_rate=100):
+    def __init__(self, actions, state_size=2, action_size=50, bufferLength=5_000, gamma=0.9, learning_rate=0.001, update_rate=1000):
         """
         Initialize a DQN agent.
 
@@ -118,7 +118,7 @@ class Agent:
         Returns:
             Action: Selected action.
         """
-        epsilon = 0.1 ** (4 * time / 100_000)
+        epsilon = 0.1 ** (4*time / 100_000)
         random_action = self.int_to_action[np.random.randint(self.action_size)]
         state = np.array([state.q, state.theta]).reshape((1, self.state_size))
         Q_values = self.local_network.predict(state, verbose=0)
