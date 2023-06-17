@@ -147,7 +147,8 @@ def visualize_convergence_over_T(env, groupname, gamma):
     plt.legend(loc='lower right', fontsize=12)
     plt.show()
 
-def visualize_over_gamma(env, gamma_files, extra_space=0):
+
+def visualize_over_gamma(env, gamma_files, extra_space=0, n_episodes=1000, alt=False):
     profit = []
     q = []
     theta = []
@@ -160,9 +161,14 @@ def visualize_over_gamma(env, gamma_files, extra_space=0):
 
         group = file[file_name]
 
-        pi1_L = group['pi1_L'][:]; pi2_L = group['pi2_L'][:]
-        theta1_L = group['theta1_L'][:]; theta2_L = group['theta2_L'][:]
-        q1_L = group['q1_L'][:]; q2_L = group['q2_L'][:]
+        if alt:
+            pi1_L = group['pi1_t'][:]; pi2_L = group['pi2_t'][:]
+            theta1_L = group['theta1_t'][:]; theta2_L = group['theta2_t'][:]
+            q1_L = group['q1_t'][:]; q2_L = group['q2_t'][:]
+        else:
+            pi1_L = group['pi1_L'][:]; pi2_L = group['pi2_L'][:]
+            theta1_L = group['theta1_L'][:]; theta2_L = group['theta2_L'][:]
+            q1_L = group['q1_L'][:]; q2_L = group['q2_L'][:]
 
         file.close()
         Cycles = Cycle_Classifier(env, pi1_L, pi2_L, theta1_L, theta2_L, q1_L, q2_L)
@@ -188,12 +194,12 @@ def visualize_over_gamma(env, gamma_files, extra_space=0):
         q_variance = np.append(q_variance, var)
 
     x = np.array([0.75, 0.8, 0.85, 0.9, 0.95, 0.98]) 
-    profit_ci = 1.96 * np.sqrt(profit_variance) / np.sqrt(1000)
-    theta_ci = 1.96 * np.sqrt(theta_variance) / np.sqrt(1000)
-    q_ci = 1.96 * np.sqrt(q_variance) / np.sqrt(1000)
+    profit_ci = 1.96 * np.sqrt(profit_variance) / np.sqrt(n_episodes)
+    theta_ci = 1.96 * np.sqrt(theta_variance) / np.sqrt(n_episodes)
+    q_ci = 1.96 * np.sqrt(q_variance) / np.sqrt(n_episodes)
     fig, ax = plt.subplots()
 
-    ax.plot(x, profit_mean, 'bo--', label='Δ')
+    ax.plot(x, profit_mean, 'bo--', label='∆')
     ax.plot(x, q_mean, 'go--', label='Ψ')
     ax.plot(x, theta_mean, 'ro--', label='Υ')
 
