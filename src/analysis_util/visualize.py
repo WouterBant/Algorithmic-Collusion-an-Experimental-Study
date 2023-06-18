@@ -218,3 +218,73 @@ def visualize_over_gamma(env, gamma_files, extra_space=0, n_episodes=1000, alt=F
     text = f'ξ = {env.Xi}, μ = {env.Mu}, λ = {env.Lambda}, φ = {env.Phi}'
     plt.annotate(text, xy=(0.50+extra_space, 0.90), xycoords='axes fraction', ha='right', va='bottom', fontsize=13)
     plt.show()
+
+def visualize_convergence_over_T_DQN(env, groupname):
+    current_dir = os.getcwd()
+    file_path = os.path.join(current_dir, '..', '..', 'data', 'simulation_data.h5')
+
+    file = h5py.File(file_path, 'r')
+
+    group = file[groupname]
+
+    pi1_t = group['pi1_t'][:]; pi2_t = group['pi2_t'][:]
+    theta1_t = group['theta1_t'][:]; theta2_t = group['theta2_t'][:]
+    q1_t = group['q1_t'][:]; q2_t = group['q2_t'][:]
+
+    file.close()
+
+    profit = np.vstack((pi1_t, pi2_t))
+    q = np.vstack((q1_t, q2_t))
+    theta = np.vstack((theta1_t, theta2_t))
+                
+    collusive_profit, competitive_profit = env.get_profit()
+    profit = (profit - competitive_profit) / (collusive_profit - competitive_profit)
+
+    mean_profit = np.mean(profit, axis=0)
+    std_profit = np.std(profit, axis=0)
+
+    l = 20
+    
+    confidence_interval_profit = 2.093 * std_profit / np.sqrt(l)
+
+    collusive_q, competitive_q = env.get_q()
+    q = (q - competitive_q) / (collusive_q - competitive_q)
+
+    mean_q = np.mean(q, axis=0)
+    std_q = np.std(q, axis=0)
+
+    confidence_interval_q = 2.093 * std_q / np.sqrt(l)
+    
+    collusive_theta, competitive_theta = env.get_theta()
+    theta = (theta - competitive_theta) / (collusive_theta - competitive_theta)
+
+    mean_theta = np.mean(theta, axis=0)
+    std_theta = np.std(theta, axis=0)
+
+    confidence_interval_theta = 2.093 * std_theta / np.sqrt(l)
+
+    x = np.arange(3, 1096)
+    fig, ax = plt.subplots()
+
+    ax.plot(x, mean_profit.T, color='blue', label='∆')
+    ax.fill_between(x, mean_profit.T - confidence_interval_profit.T, mean_profit.T + confidence_interval_profit.T,
+                    color='b', alpha=0.1)
+
+    ax.plot(x, mean_q.T, color='g', label='Ψ')
+    ax.fill_between(x, mean_q.T - confidence_interval_q.T, mean_q.T + confidence_interval_q.T,
+                    color='g', alpha=0.1)
+
+    ax.plot(x, mean_theta.T, color='r', label='Υ')
+    ax.fill_between(x, mean_theta.T - confidence_interval_theta.T, mean_theta.T + confidence_interval_theta.T,
+                    color='r', alpha=0.1)
+    ax.axhline(y=0, color='k', linestyle='--', alpha=0.3)
+    plt.xlabel('Months (1 Iteration per Day)', fontsize=12)
+    plt.title('Convergence During Episodes', fontsize=15)
+    month_ticks = np.arange(0, 1093, step=3*30)  # Generate ticks every 3 months (assuming 30 days per month)
+    month_labels = np.arange(0, len(month_ticks)) * 3
+    plt.xticks(month_ticks, month_labels, fontsize=13)
+    plt.yticks(fontsize=13)
+    text = f'γ = {0.9}, ξ = {env.Xi}, μ = {env.Mu}, λ = {env.Lambda}, φ = {env.Phi}'
+    plt.annotate(text, xy=(0.5, 0.05), xycoords='axes fraction', ha='center', va='bottom', fontsize=12)
+    plt.legend(loc='lower right', fontsize=12)
+    plt.show()
