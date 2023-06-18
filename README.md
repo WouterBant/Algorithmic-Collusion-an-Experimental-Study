@@ -1,7 +1,4 @@
-# BSc Thesis
 ## Algorithmic Collusion: An Experimental Study of Firms' CSR Investment Decisions and an Innovative Regulatory Framework
-
-In progress
 
 ## About
 This repo presents the code used to obtain the results from the paper: Algorithmic Collusion: An Experimental Study of Firms' CSR Investment Decisions and an Innovative Regulatory Framework. This paper researches algorithmic collusion of Artificial Intelligence Algorithms in a duopoly setting where firms let these algorithms completely decide their production quantity and investment in Corporate Social Responsibility.
@@ -32,3 +29,7 @@ pip install -r requirements.txt
 
 ### Usage
 To use an algorithm just navigate to one of the files in [/runs](src/runs) and try the example or try something different. Note that most plots from the paper require the simulation data which can be acquired upon request. When you use simulate_episodes, you should make a directory called 'data' in the root directory of this project and in this directory, a h5 file called 'simulation_data' should be created.
+
+
+## License
+MIT   
