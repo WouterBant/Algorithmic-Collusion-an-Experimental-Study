@@ -1,7 +1,8 @@
-## Algorithmic Collusion: An Experimental Study of Firms' CSR Investment Decisions and an Innovative Regulatory Framework
+## Algorithmic Collusion: 
+## An Experimental Study of Firms' CSR Investment Decisions and an Innovative Regulatory Framework
 
 ## About
-This repo contains the code used to obtain the results from the paper: Algorithmic Collusion: An Experimental Study of Firms' CSR Investment Decisions and an Innovative Regulatory Framework. This paper researches algorithmic collusion of Artificial Intelligence Algorithms in a duopoly setting where firms let these algorithms completely decide their production quantity and investment in Corporate Social Responsibility.
+This repo contains the code used to obtain the results from the paper: Algorithmic Collusion: An Experimental Study of Firms' CSR Investment Decisions. This paper researches algorithmic collusion of Artificial Intelligence Algorithms in a duopoly setting where firms let these algorithms completely decide their production quantity and investment in Corporate Social Responsibility.
 
 ## Structure
 
